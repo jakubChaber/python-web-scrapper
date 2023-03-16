@@ -1,4 +1,3 @@
-
 import sys
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
@@ -18,35 +17,29 @@ def inflection(param):
         browser.get(urlsDict["mainUrl"].format(param))
         wordFromList = browser.find_element(
             "link text", param).get_attribute("href").split("/")
-
         browser.get(urlsDict["printUrl"].format(wordFromList[5], param))
         inflectedForms = browser.find_element(
             "css selector", ".expand_fleksja")
         array = inflectedForms.text.split()
         browser.close()
         returnArray = []
-        if len(param)>3:
+        if len(param)>4:
             halfParamLen = int(len(param)/2)
         else:
-            halfParamLen = 2
+            halfParamLen = 1
         for x in range(0, len(array)):
-            if x > 9 and not ('.' in array[x]) and param[0:halfParamLen] in array[x]:
+            if x > 9 and param[0:halfParamLen] in array[x]:
                 returnArray.append(array[x])
-
         inflectedString = formatString(returnArray)
-
-        print(inflectedString)
         
-        return inflectedString
     except:
-        return 0
-
-
+        inflectedString = 'error'
+    print(inflectedString)
+    return inflectedString
 
 def formatString(array):
     array = list(dict.fromkeys(array))
     returningString = ', '.join([str(elem) for elem in array])
     return returningString
-
 
 inflection(word)
